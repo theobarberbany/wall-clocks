@@ -16,22 +16,81 @@ limitations under the License.
 package v1
 
 import (
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
-// NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
-
 // WallClockSpec defines the desired state of WallClock
 type WallClockSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	// Timezone is the timezone for the clock
+	Timezone string `json:"timezone,omitempty"`
 }
 
-// WallClockStatus defines the observed state of WallClock
+// WallClockPhase determines the phase in which the WallClock currently is in
+type WallClockPhase string
+
+// The following WallClockPhases enumerate all possible WallClockPhases
+const (
+	WallClockPhaseNew      WallClockPhase = "New"
+	WallClockPhaseUpdating WallClockPhase = "Updating"
+	WallClockPhaseUpdated  WallClockPhase = "Updated"
+	WallClockPhaseFailed   WallClockPhase = "Failed"
+)
+
+// WallClockStatus defines the observed state of a WallClock
 type WallClockStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	// Time is the time on the WallClock
+	Time metav1.Time `json:"time"`
+
+	// Phase is used to determine which phase of the clock cycle a clock
+	// is currently in.
+	Phase WallClockPhase `json:"phase"`
+
+	// Conditions gives detailed condition information about the clock
+	Conditions []WallClockCondition `json:"conditions,omitempty"`
+}
+
+// WallClockConditionType is the type of a WallClockCondition
+type WallClockConditionType string
+
+const (
+	// TimezoneParsedType refers to the type of condition where the controller
+	// successfully managed parse a Timezone
+	TimezoneParsedType WallClockConditionType = "TimezoneParsed"
+)
+
+const (
+	// ReasonGotTimezone refers to whether the controller successfully managed to
+	// locate the desired timezone
+	ReasonGotTimezone WallClockConditionReason = "GotTimezone"
+
+	// ReasonErrorGettingTimezone is a clock condition for an error finding the
+	// time zone
+	ReasonErrorGettingTimezone WallClockConditionReason = "ErrorGettingTimezone"
+)
+
+// WallClockConditionReason represents a valid condition reason for a WallClock
+type WallClockConditionReason string
+
+// WallClockCondition is a status condition for a WallClock
+type WallClockCondition struct {
+	// Type of this condition
+	Type WallClockConditionType `json:"type"`
+
+	// Status of this condition
+	Status corev1.ConditionStatus `json:"status"`
+
+	// LastUpdateTime of this condition
+	LastUpdateTime metav1.Time `json:"lastUpdateTime,omitempty"`
+
+	// LastTransitionTime of this condition
+	LastTransitionTime metav1.Time `json:"lastTransitionTime,omitempty"`
+
+	// Reason for the current status of this condition
+	Reason WallClockConditionReason `json:"reason,omitempty"`
+
+	// Message associated with this condition
+	Message string `json:"message,omitempty"`
 }
 
 // WallClock is the Schema for the wallclocks API
@@ -45,9 +104,9 @@ type WallClock struct {
 	Status WallClockStatus `json:"status,omitempty"`
 }
 
-// +kubebuilder:object:root=true
-
 // WallClockList contains a list of WallClock
+// +kubebuilder:object:root=true
+// +kubebuilder:resource:path=wallclockList,scope=Cluster
 type WallClockList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
