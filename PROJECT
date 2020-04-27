@@ -1,0 +1,10 @@
+version: "2"
+domain: ziglu.io
+repo: github.com/ziglu/wallclocks
+resources:
+- group: wallclocks
+  version: v1
+  kind: Timezones
+- group: wallclocks
+  version: v1
+  kind: WallClock

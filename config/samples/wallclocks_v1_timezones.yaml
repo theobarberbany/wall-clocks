@@ -1,0 +1,7 @@
+apiVersion: wallclocks.ziglu.io/v1
+kind: Timezones
+metadata:
+  name: timezones-sample
+spec:
+  # Add fields here
+  foo: bar
