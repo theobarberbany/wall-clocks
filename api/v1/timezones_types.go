@@ -102,11 +102,10 @@ type TimezonesCondition struct {
 	Message string `json:"message,omitempty"`
 }
 
-// +kubebuilder:object:root=true
-// +kubebuilder:resource:path=timezones,scope=Cluster
-
 // Timezones is the Schema for the timezones API
-// +kubebuilder:resource:path=timezones,shortName=tzone;tz;tzs
+// +kubebuilder:object:root=true
+// +genclient:nonNamespaced
+// +kubebuilder:resource:path=timezones,scope=Cluster,shortName=tzone;tz;tzs
 // +kubebuilder:printcolumn:name="WallClocks created",type="integer",JSONPath=".status.wallClocksCreatedCount",description="Number of WallClocks created"
 // +kubebuilder:printcolumn:name="Phase",type="string",JSONPath=".status.phase"
 // +kubebuilder:printcolumn:name="Completed",type="date",JSONPath=".status.completionTimestamp",description="The time since the creation of WallClocks completed"
@@ -119,10 +118,9 @@ type Timezones struct {
 	Status TimezonesStatus `json:"status,omitempty"`
 }
 
+// TimezonesList contains a list of Timezones
 // +kubebuilder:object:root=true
 // +kubebuilder:resource:path=timezonesList,scope=Cluster
-
-// TimezonesList contains a list of Timezones
 type TimezonesList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
