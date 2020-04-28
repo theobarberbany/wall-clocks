@@ -16,7 +16,6 @@ limitations under the License.
 package v1
 
 import (
-	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -31,10 +30,8 @@ type WallClockPhase string
 
 // The following WallClockPhases enumerate all possible WallClockPhases
 const (
-	WallClockPhaseNew      WallClockPhase = "New"
-	WallClockPhaseUpdating WallClockPhase = "Updating"
-	WallClockPhaseUpdated  WallClockPhase = "Updated"
-	WallClockPhaseFailed   WallClockPhase = "Failed"
+	WallClockPhaseNew         WallClockPhase = "New"
+	WallClockPhaseInitialised WallClockPhase = "Initialised"
 )
 
 // WallClockStatus defines the observed state of a WallClock
@@ -45,52 +42,6 @@ type WallClockStatus struct {
 	// Phase is used to determine which phase of the clock cycle a clock
 	// is currently in.
 	Phase WallClockPhase `json:"phase"`
-
-	// Conditions gives detailed condition information about the clock
-	Conditions []WallClockCondition `json:"conditions,omitempty"`
-}
-
-// WallClockConditionType is the type of a WallClockCondition
-type WallClockConditionType string
-
-const (
-	// TimezoneParsedType refers to the type of condition where the controller
-	// successfully managed parse a Timezone
-	TimezoneParsedType WallClockConditionType = "TimezoneParsed"
-)
-
-const (
-	// ReasonGotTimezone refers to whether the controller successfully managed to
-	// locate the desired timezone
-	ReasonGotTimezone WallClockConditionReason = "GotTimezone"
-
-	// ReasonErrorGettingTimezone is a clock condition for an error finding the
-	// time zone
-	ReasonErrorGettingTimezone WallClockConditionReason = "ErrorGettingTimezone"
-)
-
-// WallClockConditionReason represents a valid condition reason for a WallClock
-type WallClockConditionReason string
-
-// WallClockCondition is a status condition for a WallClock
-type WallClockCondition struct {
-	// Type of this condition
-	Type WallClockConditionType `json:"type"`
-
-	// Status of this condition
-	Status corev1.ConditionStatus `json:"status"`
-
-	// LastUpdateTime of this condition
-	LastUpdateTime metav1.Time `json:"lastUpdateTime,omitempty"`
-
-	// LastTransitionTime of this condition
-	LastTransitionTime metav1.Time `json:"lastTransitionTime,omitempty"`
-
-	// Reason for the current status of this condition
-	Reason WallClockConditionReason `json:"reason,omitempty"`
-
-	// Message associated with this condition
-	Message string `json:"message,omitempty"`
 }
 
 // WallClock is the Schema for the wallclocks API
