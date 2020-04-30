@@ -18,7 +18,6 @@ limitations under the License.
 package v1
 
 import (
-	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -47,59 +46,24 @@ type TimezonesStatus struct {
 	Phase TimezonesPhase `json:"phase"`
 
 	// WallClocksCreated lists the names of all WallClocks created by the
-	// controller for this Timezones.
+	// controller for the given Timezones.
 	WallClocksCreated []string `json:"wallClocksCreated,omitempty"`
 
 	// WallClocksCreatedCount is the count of WallClocksCreated.
 	// This is used for printing in kubectl.
 	WallClocksCreatedCount int `json:"wallClocksCreatedCount,omitempty"`
 
+	// WallClocksFailed lists the names of all WallClocks that the controller failed to create
+	// for the given Timezones.
+	WallClocksFailed []string `json:"wallClocksFailed,omitempty"`
+
+	// WallClocksFailedCount is the count of WallClocksFailed.
+	// This is used for printing in kubectl.
+	WallClocksFailedCount int `json:"wallClocksFailedCount,omitempty"`
+
 	// CompletionTimestamp is a timestamp for when the creation of WallClocks
 	// has completed
 	CompletionTimestamp *metav1.Time `json:"completionTimestamp,omitempty"`
-
-	// Conditions gives detailed condition information about the Timezones
-	//Conditions []TimezonesCondition `json:"conditions,omitempty"`
-}
-
-// TimezonesConditionType is the type of a TimezonesCondition
-type TimezonesConditionType string
-
-const (
-	// WallClocksCreatedType refers to whether the controller successfully
-	// created all of the required Timezoness
-	WallClocksCreatedType TimezonesConditionType = "TimezonesCreated"
-
-	// WallClocksInProgressType refers to whether the controller is currently
-	// processing WallClocks
-	WallClocksInProgressType TimezonesConditionType = "TimezonesInProgress"
-)
-
-// TimezonesConditionReason represents a valid condition reason for a Timezones
-type TimezonesConditionReason string
-
-// TimezonesCondition is a status condition for a Timezones
-type TimezonesCondition struct {
-	// Type of this condition
-	Type TimezonesConditionType `json:"type"`
-
-	// Status of this condition
-	Status corev1.ConditionStatus `json:"status"`
-
-	// this makes code gen blow up, I can't be bothered to hunt down why given
-	// time constraints
-
-	// LastUpdateTime of this condition
-	LastUpdateTime metav1.Time `json:"lastUpdateTime,omitempty"`
-
-	// LastTransitionTime of this condition
-	LastTransitionTime metav1.Time `json:"lastTransitionTime,omitempty"`
-
-	// Reason for the current status of this condition
-	Reason TimezonesConditionReason `json:"reason,omitempty"`
-
-	// Message associated with this condition
-	Message string `json:"message,omitempty"`
 }
 
 // Timezones is the Schema for the timezones API

@@ -26,7 +26,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
 	wallclocksv1 "github.com/ziglu/wallclocks/api/v1"
-	"github.com/ziglu/wallclocks/controllers"
+	"github.com/ziglu/wallclocks/controllers/timezones"
+	"github.com/ziglu/wallclocks/controllers/wallclocks"
 	// +kubebuilder:scaffold:imports
 )
 
@@ -62,14 +63,14 @@ func main() {
 		os.Exit(1)
 	}
 
-	if err = (&controllers.WallClockReconciler{
+	if err = (&wallclocks.WallClockReconciler{
 		Client: mgr.GetClient(),
 		Log:    ctrl.Log.WithName("controllers").WithName("WallClock"),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "WallClock")
 		os.Exit(1)
 	}
-	if err = (&controllers.TimezonesReconciler{
+	if err = (&timezones.TimezonesReconciler{
 		Client: mgr.GetClient(),
 		Log:    ctrl.Log.WithName("controllers").WithName("Timezones"),
 		Scheme: mgr.GetScheme(),
@@ -77,7 +78,7 @@ func main() {
 		setupLog.Error(err, "unable to create controller", "controller", "Timezones")
 		os.Exit(1)
 	}
-	if err = (&controllers.TimezonesReconciler{
+	if err = (&timezones.TimezonesReconciler{
 		Client: mgr.GetClient(),
 		Log:    ctrl.Log.WithName("controllers").WithName("Timezones"),
 		Scheme: mgr.GetScheme(),

@@ -41,47 +41,11 @@ spec:
         status:
           description: WallClockStatus defines the observed state of a WallClock
           properties:
-            conditions:
-              description: Conditions gives detailed condition information about the
-                clock
-              items:
-                description: WallClockCondition is a status condition for a WallClock
-                properties:
-                  lastTransitionTime:
-                    description: LastTransitionTime of this condition
-                    format: date-time
-                    type: string
-                  lastUpdateTime:
-                    description: LastUpdateTime of this condition
-                    format: date-time
-                    type: string
-                  message:
-                    description: Message associated with this condition
-                    type: string
-                  reason:
-                    description: Reason for the current status of this condition
-                    type: string
-                  status:
-                    description: Status of this condition
-                    type: string
-                  type:
-                    description: Type of this condition
-                    type: string
-                required:
-                - status
-                - type
-                type: object
-              type: array
-            phase:
-              description: Phase is used to determine which phase of the clock cycle
-                a clock is currently in.
-              type: string
             time:
               description: Time is the time on the WallClock
               format: date-time
               type: string
           required:
-          - phase
           - time
           type: object
       type: object

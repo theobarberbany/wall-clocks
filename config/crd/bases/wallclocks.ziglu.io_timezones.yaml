@@ -72,12 +72,22 @@ spec:
               type: string
             wallClocksCreated:
               description: WallClocksCreated lists the names of all WallClocks created
-                by the controller for this Timezones.
+                by the controller for the given Timezones.
               items:
                 type: string
               type: array
             wallClocksCreatedCount:
               description: WallClocksCreatedCount is the count of WallClocksCreated.
+                This is used for printing in kubectl.
+              type: integer
+            wallClocksFailed:
+              description: WallClocksFailed lists the names of all WallClocks that
+                the controller failed to create for the given Timezones.
+              items:
+                type: string
+              type: array
+            wallClocksFailedCount:
+              description: WallClocksFailedCount is the count of WallClocksFailed.
                 This is used for printing in kubectl.
               type: integer
           required:
