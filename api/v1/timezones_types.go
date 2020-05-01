@@ -34,9 +34,8 @@ type TimezonesPhase string
 
 // The following TimezonesPhases enumerate all possible TimezonesPhases
 const (
-	TimezonesPhaseNew        TimezonesPhase = "New"
-	TimezonesPhaseInProgress TimezonesPhase = "InProgress"
-	TimezonesPhaseCompleted  TimezonesPhase = "Completed"
+	TimezonesPhaseNew       TimezonesPhase = "New"
+	TimezonesPhaseCompleted TimezonesPhase = "Completed"
 )
 
 // TimezonesStatus defines the observed state of Timezones

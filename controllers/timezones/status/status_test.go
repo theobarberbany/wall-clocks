@@ -60,7 +60,7 @@ var _ = Describe("Timezones Status Suite", func() {
 			var phase wallclocksv1.TimezonesPhase
 
 			BeforeEach(func() {
-				phase = wallclocksv1.TimezonesPhaseInProgress
+				phase = wallclocksv1.TimezonesPhaseNew
 				Expect(timezones.Status.Phase).ToNot(Equal(phase))
 				result.Phase = &phase
 			})
