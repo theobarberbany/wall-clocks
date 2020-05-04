@@ -18,6 +18,7 @@ package timezones
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/go-logr/logr"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -154,7 +155,7 @@ func newWallClock(name string, timezone string, instance *wallclocksv1.Timezones
 			Kind:       "WallClock",
 		},
 		ObjectMeta: metav1.ObjectMeta{
-			Name: fmt.Sprintf("%s-%s", name, timezone),
+			Name: fmt.Sprintf("%s-%s", name, strings.ToLower(timezone)),
 			OwnerReferences: []metav1.OwnerReference{
 				newOwnerRef(instance, instance.GroupVersionKind(), true, true),
 			},

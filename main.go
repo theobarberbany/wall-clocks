@@ -18,6 +18,7 @@ package main
 import (
 	"flag"
 	"os"
+	"time"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
@@ -27,7 +28,7 @@ import (
 
 	wallclocksv1 "github.com/ziglu/wallclocks/api/v1"
 	"github.com/ziglu/wallclocks/controllers/timezones"
-	"github.com/ziglu/wallclocks/controllers/wallclocks"
+	"github.com/ziglu/wallclocks/controllers/wallclock"
 	// +kubebuilder:scaffold:imports
 )
 
@@ -53,17 +54,20 @@ func main() {
 
 	ctrl.SetLogger(zap.Logger(true))
 
+	syncPeriod := time.Duration(2) * time.Minute
+
 	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
 		Scheme:             scheme,
 		MetricsBindAddress: metricsAddr,
 		LeaderElection:     enableLeaderElection,
+		SyncPeriod:         &syncPeriod,
 	})
 	if err != nil {
 		setupLog.Error(err, "unable to start manager")
 		os.Exit(1)
 	}
 
-	if err = (&wallclocks.WallClockReconciler{
+	if err = (&wallclock.WallClockReconciler{
 		Client: mgr.GetClient(),
 		Log:    ctrl.Log.WithName("controllers").WithName("WallClock"),
 	}).SetupWithManager(mgr); err != nil {

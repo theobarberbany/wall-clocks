@@ -34,6 +34,7 @@ type WallClockStatus struct {
 // WallClock is the Schema for the wallclocks API
 // +kubebuilder:object:root=true
 // +kubebuilder:resource:path=wallclock,scope=Cluster,shortName=wclock;wc;wcs
+// +kubebuilder:printcolumn:name="Time",type="string",JSONPath=".status.time"
 type WallClock struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
