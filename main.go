@@ -78,14 +78,6 @@ func main() {
 		setupLog.Error(err, "unable to create controller", "controller", "Timezones")
 		os.Exit(1)
 	}
-	if err = (&timezones.TimezonesReconciler{
-		Client: mgr.GetClient(),
-		Log:    ctrl.Log.WithName("controllers").WithName("Timezones"),
-		Scheme: mgr.GetScheme(),
-	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "Timezones")
-		os.Exit(1)
-	}
 	if err = (&wallclocksv1.WallClock{}).SetupWebhookWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create webhook", "webhook", "WallClock")
 		os.Exit(1)
