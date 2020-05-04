@@ -3,10 +3,10 @@
 # It should be run by config/default
 resources:
 - bases/wallclocks.ziglu.io_timezones.yaml
-- bases/wallclocks.ziglu.io_wallclocks.yaml
+- bases/wallclocks.ziglu.io_wallclock.yaml
 # +kubebuilder:scaffold:crdkustomizeresource
 
-patches:
+# patches:
 # [WEBHOOK] To enable webhook, uncomment all the sections with [WEBHOOK] prefix.
 # patches here are for enabling the conversion webhook for each CRD
 #- patches/webhook_in_timezones.yaml
