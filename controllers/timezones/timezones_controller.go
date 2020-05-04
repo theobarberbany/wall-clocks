@@ -41,6 +41,7 @@ type TimezonesReconciler struct {
 }
 
 // +kubebuilder:rbac:groups=wallclocks.ziglu.io,resources=timezones,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=wallclocks.ziglu.io,resources=wallclocks,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=wallclocks.ziglu.io,resources=timezones/status,verbs=get;update;patch
 // Automatically generate RBAC rules to allow the Controller to read and write TimeZones and WallClocks
 
@@ -50,7 +51,7 @@ func (r *TimezonesReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	ctx := context.Background()
 	log := r.Log.WithValues("timezones", req.NamespacedName)
 
-	var instance *wallclocksv1.Timezones
+	instance := &wallclocksv1.Timezones{}
 	if err := r.Get(ctx, req.NamespacedName, instance); err != nil {
 		log.Error(err, "unable to fetch instance")
 		// we'll ignore not-found errors, since they can't be fixed by an immediate
@@ -59,6 +60,7 @@ func (r *TimezonesReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
+	log.Info("Starting to reconcile", "instance", instance.GetName())
 	result, err := r.HandleTimezonesObject(instance)
 	if err != nil {
 		// Ensure we attempt to update the status even when the handler fails
@@ -69,7 +71,7 @@ func (r *TimezonesReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 
 		return reconcile.Result{}, fmt.Errorf("error handling timezones %s: %+v", instance.GetName(), err)
 	}
-
+	log.Info("Updating status", "instance", instance.GetName())
 	err = status.UpdateStatus(r.Client, instance, result)
 	if err != nil {
 		return ctrl.Result{}, fmt.Errorf("error updating status: %v", err)
@@ -146,13 +148,13 @@ func (r *TimezonesReconciler) HandleNew(instance *wallclocksv1.Timezones) (*stat
 }
 
 func newWallClock(name string, timezone string, instance *wallclocksv1.Timezones) *wallclocksv1.WallClock {
-	return &wallclocksv1.WallClock{
+	wallClock := &wallclocksv1.WallClock{
 		TypeMeta: metav1.TypeMeta{
 			APIVersion: wallclocksv1.GroupVersion.String(),
 			Kind:       "WallClock",
 		},
 		ObjectMeta: metav1.ObjectMeta{
-			GenerateName: name,
+			Name: fmt.Sprintf("%s-%s", name, timezone),
 			OwnerReferences: []metav1.OwnerReference{
 				newOwnerRef(instance, instance.GroupVersionKind(), true, true),
 			},
@@ -162,6 +164,7 @@ func newWallClock(name string, timezone string, instance *wallclocksv1.Timezones
 		},
 		Status: wallclocksv1.WallClockStatus{},
 	}
+	return wallClock.DeepCopy()
 }
 
 // newOwnerRef creates an OwnerReference pointing to the given owner

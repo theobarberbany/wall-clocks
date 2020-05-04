@@ -70,6 +70,7 @@ type TimezonesStatus struct {
 // +genclient:nonNamespaced
 // +kubebuilder:resource:path=timezones,scope=Cluster,shortName=tzone;tz;tzs
 // +kubebuilder:printcolumn:name="WallClocks created",type="integer",JSONPath=".status.wallClocksCreatedCount",description="Number of WallClocks created"
+// +kubebuilder:printcolumn:name="WallClocks failed",type="integer",JSONPath=".status.wallClocksFailedCount",description="Number of WallClocks that failed to create"
 // +kubebuilder:printcolumn:name="Phase",type="string",JSONPath=".status.phase"
 // +kubebuilder:printcolumn:name="Completed",type="date",JSONPath=".status.completionTimestamp",description="The time since the creation of WallClocks completed"
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"

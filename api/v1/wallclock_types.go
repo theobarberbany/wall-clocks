@@ -28,7 +28,7 @@ type WallClockSpec struct {
 // WallClockStatus defines the observed state of a WallClock
 type WallClockStatus struct {
 	// Time is the time on the WallClock
-	Time metav1.Time `json:"time"`
+	Time *string `json:"time,omitempty"`
 }
 
 // WallClock is the Schema for the wallclocks API

@@ -20,7 +20,10 @@ import (
 	"time"
 
 	"github.com/tkuchiki/go-timezone"
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/apimachinery/pkg/runtime/schema"
+	"k8s.io/apimachinery/pkg/util/validation/field"
 	ctrl "sigs.k8s.io/controller-runtime"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
@@ -66,6 +69,7 @@ func (r *WallClock) ValidateDelete() error {
 
 // validateWallClock checks that the requested timezone is valid
 func (r *WallClock) validateWallClock() error {
+	wallclocklog.Info("validating", "name", r.Name)
 	// First check, see if the built in time library can find the timezone
 	// If the timezone is empty it'll assume UTC, which is OK I think?
 	_, err := time.LoadLocation(r.Spec.Timezone)
@@ -74,7 +78,12 @@ func (r *WallClock) validateWallClock() error {
 		// code, e.g 'PDT'
 		_, err2 := timezone.GetTimezones(r.Spec.Timezone)
 		if err2 != nil {
-			return fmt.Errorf("Invalid timezone: %s", r.Spec.Timezone)
+			var allErrs field.ErrorList
+			errorField := field.Invalid(field.NewPath("spec").Child("timezone"), r.Spec.Timezone, fmt.Errorf("Invalid timezone: %s", r.Spec.Timezone).Error())
+			allErrs = append(allErrs, errorField)
+			return apierrors.NewInvalid(
+				schema.GroupKind{Group: "wallclocks.ziglu.io", Kind: "WallClock"},
+				r.Name, allErrs)
 		}
 
 		return nil

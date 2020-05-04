@@ -11,6 +11,10 @@ spec:
     description: Number of WallClocks created
     name: WallClocks created
     type: integer
+  - JSONPath: .status.wallClocksFailedCount
+    description: Number of WallClocks that failed to create
+    name: WallClocks failed
+    type: integer
   - JSONPath: .status.phase
     name: Phase
     type: string

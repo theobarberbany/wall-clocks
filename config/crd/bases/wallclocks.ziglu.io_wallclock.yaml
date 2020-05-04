@@ -43,10 +43,7 @@ spec:
           properties:
             time:
               description: Time is the time on the WallClock
-              format: date-time
               type: string
-          required:
-          - time
           type: object
       type: object
   versions:
