@@ -8,7 +8,7 @@ import (
 	"github.com/go-logr/glogr"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"github.com/ziglu/wallclocks/api"
+	wallclocksv1 "github.com/ziglu/wallclocks/api/v1"
 	"github.com/ziglu/wallclocks/test/reporters"
 	"k8s.io/client-go/kubernetes/scheme"
 	"k8s.io/client-go/rest"
@@ -29,7 +29,7 @@ var _ = BeforeSuite(func() {
 	t = &envtest.Environment{
 		CRDDirectoryPaths: []string{filepath.Join("..", "..", "..", "config", "crd", "bases")},
 	}
-	api.AddToScheme(scheme.Scheme)
+	wallclocksv1.AddToScheme(scheme.Scheme)
 
 	logf.SetLogger(glogr.New())
 
