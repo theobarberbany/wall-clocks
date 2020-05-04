@@ -12,6 +12,7 @@ require (
 	github.com/onsi/ginkgo v1.12.0
 	github.com/onsi/gomega v1.9.0
 	github.com/spf13/pflag v1.0.3 // indirect
+	github.com/stretchr/testify v1.4.0 // indirect
 	github.com/tkuchiki/go-timezone v0.1.4
 	golang.org/x/net v0.0.0-20190501004415-9ce7a6920f09
 	golang.org/x/text v0.3.2 // indirect
