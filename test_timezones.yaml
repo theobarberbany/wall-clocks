@@ -1,0 +1,9 @@
+apiVersion: wallclocks.ziglu.io/v1
+kind: Timezones
+metadata:
+  name: myclocks
+spec:
+  clocks:
+    - GMT
+    - BST
+
